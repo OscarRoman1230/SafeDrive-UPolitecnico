@@ -1,0 +1,7 @@
+{
+  "name": "SafeDrive-UPolitecnico",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
