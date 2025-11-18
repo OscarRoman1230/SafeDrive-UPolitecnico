@@ -32,6 +32,11 @@ const routes: Routes = [
         path: 'configuration',
         loadChildren: () => import('../pages/configuration/configuration.module').then( m => m.ConfigurationPageModule)
       },
+      {
+        path: '',
+        redirectTo: '/tabs/home',  // ← Cambiar aquí también
+        pathMatch: 'full'
+      }
     ]
   }
 ];

@@ -1,13 +1,133 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>statistics</ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Estadísticas</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">statistics</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <!-- Resumen General -->
+  <ion-card class="summary-card">
+    <ion-card-header>
+      <ion-card-title>Resumen General</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <div class="stat-box">
+              <ion-icon name="car-outline" color="primary"></ion-icon>
+              <h2>{{ generalStatistics.totalTours }}</h2>
+              <p>Recorridos</p>
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <div class="stat-box">
+              <ion-icon name="navigate-outline" color="success"></ion-icon>
+              <h2>{{ generalStatistics.totalDistance }} km</h2>
+              <p>Distancia Total</p>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            <div class="stat-box">
+              <ion-icon name="time-outline" color="warning"></ion-icon>
+              <h2>{{ generalStatistics.totalTime }} h</h2>
+              <p>Tiempo Total</p>
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <div class="stat-box">
+              <ion-icon name="speedometer-outline" color="tertiary"></ion-icon>
+              <h2>{{ generalStatistics.averageSpeed }} km/h</h2>
+              <p>Vel. Promedio</p>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Gráfico de Distancia por Semana -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="bar-chart-outline"></ion-icon>
+        Distancia por Semana
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="chart-container" *ngIf="chartDistanceData">
+        <canvas baseChart
+                [data]="chartDistanceData"
+                [options]="chartOptions"
+                [type]="'bar'">
+        </canvas>
+      </div>
+      <div *ngIf="!chartDistanceData" class="no-data">
+        <p>No hay datos suficientes para mostrar el gráfico</p>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Gráfico de Nivel de Atención -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="pie-chart-outline"></ion-icon>
+        Distribución de Atención
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="chart-container" *ngIf="chartAttentionData">
+        <canvas baseChart
+                [data]="chartAttentionData"
+                [options]="pieChartOptions"
+                [type]="'doughnut'">
+        </canvas>
+      </div>
+      <div *ngIf="!chartAttentionData" class="no-data">
+        <p>No hay datos suficientes para mostrar el gráfico</p>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Estadísticas Semanales Detalladas -->
+  <ion-card *ngIf="weeklyStatistics.length > 0">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="calendar-outline"></ion-icon>
+        Estadísticas Semanales
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list lines="full">
+        <ion-item *ngFor="let semana of weeklyStatistics">
+          <ion-label>
+            <h2>{{ semana.semana }}</h2>
+            <p>{{ semana.cantidadRecorridos }} recorridos • {{ semana.distanciaTotal }} km</p>
+            <p>{{ semana.duracionTotal }} min • Promedio: {{ semana.velocidadPromedio }} km/h</p>
+          </ion-label>
+          <ion-badge slot="end" [color]="getAtencionBadgeColor(semana.promedioAtencion)">
+            Atención: {{ getAtencionTexto(semana.promedioAtencion) }}
+          </ion-badge>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Estado vacío -->
+  <ion-card *ngIf="estadisticasGenerales.totalRecorridos === 0" class="empty-state">
+    <ion-card-content>
+      <ion-icon name="analytics-outline" color="medium"></ion-icon>
+      <h2>No hay estadísticas disponibles</h2>
+      <p>Registra tus primeros recorridos para ver estadísticas detalladas</p>
+      <ion-button routerLink="/tabs/register" color="primary">
+        <ion-icon name="add-circle" slot="start"></ion-icon>
+        Registrar Recorrido
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>

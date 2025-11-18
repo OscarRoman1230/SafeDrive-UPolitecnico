@@ -1,13 +1,28 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>tabs</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="home">
+      <ion-icon name="home"></ion-icon>
+      <ion-label>Inicio</ion-label>
+    </ion-tab-button>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">tabs</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+    <ion-tab-button tab="register">
+      <ion-icon name="add-circle"></ion-icon>
+      <ion-label>Registrar</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="history">
+      <ion-icon name="list"></ion-icon>
+      <ion-label>Historial</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="statistics">
+      <ion-icon name="bar-chart"></ion-icon>
+      <ion-label>Estadísticas</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="configuration">
+      <ion-icon name="settings"></ion-icon>
+      <ion-label>Config</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

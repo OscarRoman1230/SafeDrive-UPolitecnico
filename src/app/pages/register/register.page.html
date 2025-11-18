@@ -1,13 +1,207 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register</ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Registrar Recorrido</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <form #formTour="ngForm" (ngSubmit)="saveTour()">
+
+    <!-- Fecha y Hora -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="calendar-outline"></ion-icon>
+          Fecha y Hora
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="stacked">Fecha del Recorrido</ion-label>
+          <ion-datetime-button datetime="fecha"></ion-datetime-button>
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                id="fecha"
+                presentation="date"
+                [(ngModel)]="tour.date"
+                name="fecha"
+                [max]="dateMax"
+                required>
+              </ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Hora</ion-label>
+          <ion-datetime-button datetime="hora"></ion-datetime-button>
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                id="hora"
+                presentation="time"
+                [(ngModel)]="tour.date"
+                name="hora"
+                required>
+              </ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Datos del Recorrido -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="speedometer-outline"></ion-icon>
+          Datos del Recorrido
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Distancia (km)</ion-label>
+          <ion-input
+            type="number"
+            [(ngModel)]="tour.distance"
+            name="distancia"
+            placeholder="0.0"
+            min="0"
+            step="0.1"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Duración (minutos)</ion-label>
+          <ion-input
+            type="number"
+            [(ngModel)]="tour.duration"
+            name="duracion"
+            placeholder="0"
+            min="0"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Velocidad Promedio (km/h)</ion-label>
+          <ion-input
+            type="number"
+            [(ngModel)]="tour.averageSpeed"
+            name="velocidadPromedio"
+            placeholder="0"
+            min="0"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <!-- Cálculo automático -->
+        @if (tour.distance > 0 && tour.duration > 0) {
+          <ion-item lines="none">
+            <ion-label>
+              <p class="info-text">
+                <ion-icon name="information-circle-outline"></ion-icon>
+                Velocidad calculada: {{ calculateSpeed() }} km/h
+              </p>
+            </ion-label>
+            <ion-button size="small" fill="clear" (click)="useSpeedCalculate()">
+              Usar esta
+            </ion-button>
+          </ion-item>
+        }
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Nivel de Atención -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="eye-outline"></ion-icon>
+          Nivel de Atención
+        </ion-card-title>
+        <ion-card-subtitle>¿Cómo estuvo tu concentración durante el recorrido?</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-radio-group [(ngModel)]="tour.levelAttention" name="nivelAtencion" required>
+          <ion-item>
+            <ion-radio value="Alta" slot="start"></ion-radio>
+            <ion-label>
+              <h2>
+                <ion-icon name="checkmark-circle" color="success"></ion-icon>
+                Alta
+              </h2>
+              <p>Concentrado y alerta todo el tiempo</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-radio value="Media" slot="start"></ion-radio>
+            <ion-label>
+              <h2>
+                <ion-icon name="remove-circle" color="warning"></ion-icon>
+                Media
+              </h2>
+              <p>Algunos momentos de distracción</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-radio value="Baja" slot="start"></ion-radio>
+            <ion-label>
+              <h2>
+                <ion-icon name="close-circle" color="danger"></ion-icon>
+                Baja
+              </h2>
+              <p>Frecuentes distracciones o cansancio</p>
+            </ion-label>
+          </ion-item>
+        </ion-radio-group>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Notas Adicionales -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="create-outline"></ion-icon>
+          Notas (Opcional)
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Observaciones del viaje</ion-label>
+          <ion-textarea
+            [(ngModel)]="tour.notes"
+            name="notas"
+            rows="4"
+            placeholder="Ej: Tráfico pesado, clima lluvioso, ruta nueva...">
+          </ion-textarea>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Botones de Acción -->
+    <div class="action-buttons">
+      <ion-button
+        expand="block"
+        type="submit"
+        [disabled]="!formTour.valid"
+        color="success"
+        size="large">
+        <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+        Guardar Recorrido
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        fill="outline"
+        color="medium"
+        (click)="cleanForm()">
+        <ion-icon name="refresh" slot="start"></ion-icon>
+        Limpiar Formulario
+      </ion-button>
+    </div>
+  </form>
 </ion-content>
