@@ -41,7 +41,7 @@ export class ConfigurationService {
     await this.saveConfiguration(newConfig);
   }
 
-  async resetearDatos(): Promise<void> {
+  async resetData(): Promise<void> {
     await this.storageService.clear();
     await this.saveConfiguration(this.CONFIG_DEFAULT);
   }

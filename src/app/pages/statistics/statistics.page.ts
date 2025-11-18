@@ -3,6 +3,31 @@ import { TourService } from "../../core/services/tour.service";
 import {Tour, WeeklyStatistics} from 'src/app/core/models/tour.model';
 import { ChartConfiguration } from "chart.js";
 
+import {
+  Chart,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  BarController,
+  ArcElement,
+  DoughnutController,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+
+Chart.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  BarController,
+  ArcElement,
+  DoughnutController,
+  Title,
+  Tooltip,
+  Legend
+);
+
 @Component({
   selector: 'app-statistics',
   templateUrl: './statistics.page.html',
@@ -92,11 +117,11 @@ export class StatisticsPage implements OnInit {
     this.weeklyStatistics = await this.tourService.getWeeklyStatistics();
 
     // Generar gráficos
-    this.generarGraficoDistancia();
-    this.generarGraficoAtencion(tours);
+    this.generateGraphicDistance();
+    this.generateGraphicAttention(tours);
   }
 
-  private generarGraficoDistancia() {
+  private generateGraphicDistance() {
     if (this.weeklyStatistics.length === 0) {
       this.chartDistanceData = null;
       return;
@@ -118,27 +143,27 @@ export class StatisticsPage implements OnInit {
     };
   }
 
-  private generarGraficoAtencion(tours: Tour[]) {
+  private generateGraphicAttention(tours: Tour[]) {
     if (tours.length === 0) {
       this.chartAttentionData = null;
       return;
     }
 
-    const conteo = {
+    const count = {
       Alta: 0,
       Media: 0,
       Baja: 0
     };
 
     tours.forEach(r => {
-      conteo[r.levelAttention]++;
+      count[r.levelAttention]++;
     });
 
     this.chartAttentionData = {
       labels: ['Alta', 'Media', 'Baja'],
       datasets: [
         {
-          data: [conteo.Alta, conteo.Media, conteo.Baja],
+          data: [count.Alta, count.Media, count.Baja],
           backgroundColor: [
             'rgba(34, 197, 94, 0.6)',   // Verde
             'rgba(251, 191, 36, 0.6)',  // Amarillo
@@ -155,15 +180,15 @@ export class StatisticsPage implements OnInit {
     };
   }
 
-  getAtencionBadgeColor(promedio: number): string {
-    if (promedio >= 2.5) return 'success';
-    if (promedio >= 1.5) return 'warning';
+  getAttentionBadgeColor(average: number): string {
+    if (average >= 2.5) return 'success';
+    if (average >= 1.5) return 'warning';
     return 'danger';
   }
 
-  getAtencionTexto(promedio: number): string {
-    if (promedio >= 2.5) return 'Alta';
-    if (promedio >= 1.5) return 'Media';
+  getAttentionText(average: number): string {
+    if (average >= 2.5) return 'Alta';
+    if (average >= 1.5) return 'Media';
     return 'Baja';
   }
 

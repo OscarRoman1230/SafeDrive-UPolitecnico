@@ -88,25 +88,25 @@ export class HistoryPage implements OnInit {
       header: 'Editar Recorrido',
       inputs: [
         {
-          name: 'distancia',
+          name: 'distance',
           type: 'number',
           placeholder: 'Distancia (km)',
           value: tour.distance
         },
         {
-          name: 'duracion',
+          name: 'duration',
           type: 'number',
           placeholder: 'Duración (minutos)',
           value: tour.duration
         },
         {
-          name: 'velocidadPromedio',
+          name: 'averageSpeed',
           type: 'number',
           placeholder: 'Velocidad Promedio (km/h)',
           value: tour.averageSpeed
         },
         {
-          name: 'notas',
+          name: 'notes',
           type: 'textarea',
           placeholder: 'Notas',
           value: tour.notes || ''

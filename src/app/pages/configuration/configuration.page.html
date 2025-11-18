@@ -1,13 +1,216 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>configuration</ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Configuración</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">configuration</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <!-- Perfil del Usuario -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="person-outline"></ion-icon>
+        Perfil del Usuario
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Nombre de Usuario</ion-label>
+        <ion-input
+          [(ngModel)]="configuration.userName"
+          placeholder="Ingresa tu nombre"
+          (ionBlur)="saveConfiguration()">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Vehículo</ion-label>
+        <ion-input
+          [(ngModel)]="configuration.vehicle"
+          placeholder="Ej: Toyota Corolla 2020"
+          (ionBlur)="saveConfiguration()">
+        </ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Preferencias -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="settings-outline"></ion-icon>
+        Preferencias
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>
+          <h2>Unidad de Medida</h2>
+          <p>Distancia y velocidad</p>
+        </ion-label>
+        <ion-select
+          [(ngModel)]="configuration.unitMeasure"
+          (ionChange)="saveConfiguration()"
+          interface="popover">
+          <ion-select-option value="km">Kilómetros (km)</ion-select-option>
+          <ion-select-option value="millas">Millas (mi)</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>
+          <h2>Notificaciones</h2>
+          <p>Recordatorios y alertas</p>
+        </ion-label>
+        <ion-toggle
+          [(ngModel)]="configuration.activeNotifications"
+          (ionChange)="saveConfiguration()">
+        </ion-toggle>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Meta de Distancia Semanal (km)</ion-label>
+        <ion-input
+          type="number"
+          [(ngModel)]="configuration.weeklyDistanceGoal"
+          placeholder="Opcional"
+          min="0"
+          (ionBlur)="saveConfiguration()">
+        </ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Información de la App -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="information-circle-outline"></ion-icon>
+        Información de la App
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list lines="none">
+        <ion-item>
+          <ion-icon name="logo-ionic" slot="start" color="primary"></ion-icon>
+          <ion-label>
+            <h3>Versión</h3>
+            <p>1.0.0</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="people-outline" slot="start" color="success"></ion-icon>
+          <ion-label>
+            <h3>Desarrollado por</h3>
+            <p>Equipo SafeDrive - UPolitécnico</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="code-slash-outline" slot="start" color="tertiary"></ion-icon>
+          <ion-label>
+            <h3>Tecnologías</h3>
+            <p>Ionic 8 + Angular 18</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Estadísticas de Uso -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="stats-chart-outline"></ion-icon>
+        Estadísticas de Uso
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <div class="stat-item">
+              <h3>{{ useStatistics.totalTours }}</h3>
+              <p>Total Recorridos</p>
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <div class="stat-item">
+              <h3>{{ useStatistics.totalDistance }} km</h3>
+              <p>Distancia Total</p>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            <div class="stat-item">
+              <h3>{{ useStatistics.totalTime }} h</h3>
+              <p>Tiempo Total</p>
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <div class="stat-item">
+              <h3>{{ useStatistics.activeDays }}</h3>
+              <p>Días Activo</p>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Gestión de Datos -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="folder-outline"></ion-icon>
+        Gestión de Datos
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list lines="full">
+        <ion-item [button]="true" (click)="exportData()">
+          <ion-icon name="download-outline" slot="start" color="primary"></ion-icon>
+          <ion-label>
+            <h2>Exportar Datos</h2>
+            <p>Descargar todos tus recorridos en formato JSON</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item [button]="true" (click)="confirmCleanHistory()">
+          <ion-icon name="trash-outline" slot="start" color="warning"></ion-icon>
+          <ion-label>
+            <h2>Limpiar Historial</h2>
+            <p>Eliminar todos los recorridos registrados</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item [button]="true" (click)="confirmResetApp()">
+          <ion-icon name="refresh-outline" slot="start" color="danger"></ion-icon>
+          <ion-label>
+            <h2>Resetear Aplicación</h2>
+            <p>Restaurar configuración y eliminar todos los datos</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Acerca de -->
+  <ion-card class="about-card">
+    <ion-card-content>
+      <div class="about-content">
+        <ion-icon name="shield-checkmark" color="primary"></ion-icon>
+        <h3>SafeDrive</h3>
+        <p>Tu compañero de conducción segura</p>
+        <p class="description">
+          Registra tus recorridos, monitorea tu atención al volante y mejora
+          tus hábitos de conducción con estadísticas detalladas.
+        </p>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>

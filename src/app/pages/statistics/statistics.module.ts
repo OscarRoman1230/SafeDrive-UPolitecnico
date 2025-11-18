@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { StatisticsPageRoutingModule } from './statistics-routing.module';
 
 import { StatisticsPage } from './statistics.page';
+import {BaseChartDirective} from "ng2-charts";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    StatisticsPageRoutingModule
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        StatisticsPageRoutingModule,
+        BaseChartDirective
+    ],
   declarations: [StatisticsPage]
 })
 export class StatisticsPageModule {}
